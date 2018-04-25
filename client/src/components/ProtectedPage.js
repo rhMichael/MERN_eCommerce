@@ -40,6 +40,7 @@ function ProtectedPage({ children }) {
             <div className='p-5'>
                 {user.name}
                 {children}
+                
             </div>
         )
       }
