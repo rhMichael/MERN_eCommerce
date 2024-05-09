@@ -1,6 +1,7 @@
-import { Button, Divider, Form, Input } from "antd";
+import { Button, Divider, Form, Input, message } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
+import { LoginUser } from "../../apicalls/users";
 
 const rules = [
   {
@@ -10,8 +11,20 @@ const rules = [
 
 ]
 function Login() {
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const onFinish = async(values) => {
+    // console.log("Success:", values);
+    try {
+      const response = await LoginUser(values);
+      if(response.success) {
+        message.success(response.message);
+        localStorage.setItem("token", response.data);
+        window.location.href = '/';
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      message.error(error.message);
+    }
   };
 
   return (
