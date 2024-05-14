@@ -1,6 +1,6 @@
 import { Button, Divider, Form, Input, message } from "antd";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginUser } from "../../apicalls/users";
 
 const rules = [
@@ -11,6 +11,7 @@ const rules = [
 
 ]
 function Login() {
+  const navigate = useNavigate();
   const onFinish = async(values) => {
     // console.log("Success:", values);
     try {
@@ -26,6 +27,12 @@ function Login() {
       message.error(error.message);
     }
   };
+
+  useEffect(() => {
+    if(localStorage.getItem('token')) {
+      navigate('/');
+    }
+  }, []);
 
   return (
     <div className="h-screen bg-primary flex justify-center items-center">

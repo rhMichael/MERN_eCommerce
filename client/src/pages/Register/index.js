@@ -1,7 +1,8 @@
 import { Button, Divider, Form, Input, message } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { RegisterUser } from "../../apicalls/users";
+import { useNavigate } from "react-router-dom";
 
 const rules = [
   {
@@ -11,6 +12,7 @@ const rules = [
 
 ]
 function Register() {
+  const navigate = useNavigate();
   const onFinish = async(values) => {
     try {
       const response = await RegisterUser(values);
@@ -23,6 +25,12 @@ function Register() {
       message.error(error.message);
     }
   };
+
+  useEffect(() => {
+    if(localStorage.getItem('token')) {
+      navigate('/');
+    }
+  }, []);
 
   return (
     <div className="h-screen bg-primary flex justify-center items-center">
