@@ -2,8 +2,6 @@ import { Button, Divider, Form, Input, message } from "antd";
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginUser } from "../../apicalls/users";
-import { useDispatch } from "react-redux";
-import { setLoading } from "../../redux/loadersSlice";
 
 const rules = [
   {
@@ -14,14 +12,10 @@ const rules = [
 ]
 function Login() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
   const onFinish = async(values) => {
     // console.log("Success:", values);
     try {
-      dispatch(setLoading(true));
       const response = await LoginUser(values);
-      dispatch(setLoading(false));
       if(response.success) {
         message.success(response.message);
         localStorage.setItem("token", response.data);
@@ -30,7 +24,6 @@ function Login() {
         throw new Error(response.message);
       }
     } catch (error) {
-      dispatch(setLoading(false));
       message.error(error.message);
     }
   };
@@ -45,7 +38,7 @@ function Login() {
     <div className="h-screen bg-primary flex justify-center items-center">
       <div className="bg-white p-5 rounded w-[450px]">
         <h1 className="text-primary text-2xl">
-          SMP - <span className="text-gray-400 text-2xl">LOGIN</span>
+          SMP - <span className="text-gray-400">LOGIN</span>
         </h1>
         <Divider />
         <Form layout="vertical" onFinish={onFinish}>

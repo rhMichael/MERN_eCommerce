@@ -1,34 +1,43 @@
-import React, { useEffect, useState } from "react";
-import { Avatar, Badge, message } from "antd";
-import { GetCurrentUser } from "../apicalls/users";
-import { useNavigate } from "react-router";
-import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
-import { styled } from "@mui/material/styles";
-import Checkbox from "@mui/material/Checkbox";
-import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "../redux/loadersSlice";
-import { SetUser } from "../redux/usersSlice";
-import Notifications from "./Notifications";
-import {
-  GetAllNotifications,
-  ReadAllNotifications,
-} from "../apicalls/notifications";
+import React, { useEffect } from 'react';
+import { message } from 'antd';
+import { GetCurrentUser } from '../apicalls/users';
+import { useNavigate } from 'react-router';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
+import Checkbox from '@mui/material/Checkbox';
 
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
+const DemoPaper = styled(Paper)(({ theme }) => ({
+    width: 120,
+    height: 120,
+    padding: theme.spacing(2),
+    ...theme.typography.body2,
+    textAlign: 'center',
+  }));
+
+  
 function ProtectedPage({ children }) {
-  const [notifications = [], setNotifications] = useState([]);
-  const [showNotifications, setShowNotifications] = useState(false);
-  // const [user, setUser] = React.useState(null);
-  const { user } = useSelector((state) => state.users);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+    const [user, setUser] = React.useState(null);
+    const navigate = useNavigate();
 
-  const validateToken = async () => {
-    try {
-      dispatch(setLoading(true));
-      const response = await GetCurrentUser();
-      dispatch(setLoading(false));
+    const validateToken = async () => {
+        try {
+            const response = await GetCurrentUser();
 
+<<<<<<< HEAD
+            if(response.success)
+            {
+                setUser(response.data);
+            } else {
+                navigate('/login');
+                message.error(response.error);
+            }
+        } catch (error) {
+            navigate('/login');
+            message.error(error.message);
+=======
       if (response.success) {
         // setUser(response.data);
         dispatch(SetUser(response.data));
@@ -83,14 +92,14 @@ function ProtectedPage({ children }) {
     user && (
       <div>
         {/* header */}
-        <div className="flex justify-between items-center bg-primary p-6">
+        <div className="flex justify-between item-center bg-primary p-6">
           <h1
             className="text-2xl text-white cursor-pointer"
             onClick={() => {
               navigate("/");
             }}
           >
-            MP CENTER
+            SHEY MP
           </h1>
 
           <div className="bg-white py-2 px-5 rounded flex gap-1 items-center">
@@ -143,10 +152,40 @@ function ProtectedPage({ children }) {
             showNotifications={showNotifications}
             reloadNotifications={getNotifications}
           />
+>>>>>>> parent of 04d8e48 (fix mongodb connection/feat cypress)
         }
-      </div>
-    )
-  );
+    }
+
+    useEffect(() => {
+        if(localStorage.getItem('token'))
+        {
+            validateToken();
+        } else {
+            message.error('Please login to continue');
+            navigate('/login');
+        }
+    }, []);
+  return (
+    <div>
+      {
+        user && (
+            <div className='p-5'>
+                {user.name}
+                {children}
+                <Stack direction="row" spacing={2}>
+      <DemoPaper square={false}>rounded corners</DemoPaper>
+      <DemoPaper square>square corners</DemoPaper>
+    </Stack>
+                <Checkbox {...label} defaultChecked />
+      <Checkbox {...label} />
+      <Checkbox {...label} disabled />
+      
+      <Checkbox {...label} disabled checked />
+            </div>
+        )
+      }
+    </div>
+  )
 }
 
-export default ProtectedPage;
+export default ProtectedPage
