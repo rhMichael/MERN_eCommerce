@@ -26,7 +26,6 @@ function ProtectedPage({ children }) {
         try {
             const response = await GetCurrentUser();
 
-<<<<<<< HEAD
             if(response.success)
             {
                 setUser(response.data);
@@ -37,7 +36,6 @@ function ProtectedPage({ children }) {
         } catch (error) {
             navigate('/login');
             message.error(error.message);
-=======
       if (response.success) {
         // setUser(response.data);
         dispatch(SetUser(response.data));
@@ -45,10 +43,6 @@ function ProtectedPage({ children }) {
         navigate("/login");
         message.error(response.error);
       }
-    } catch (error) {
-      dispatch(setLoading(false));
-      navigate("/login");
-      message.error(error.message);
     }
   };
 
@@ -152,9 +146,9 @@ function ProtectedPage({ children }) {
             showNotifications={showNotifications}
             reloadNotifications={getNotifications}
           />
->>>>>>> parent of 04d8e48 (fix mongodb connection/feat cypress)
         }
-    }
+      </div> )
+  )
 
     useEffect(() => {
         if(localStorage.getItem('token'))
