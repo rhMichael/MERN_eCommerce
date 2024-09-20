@@ -3,8 +3,6 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { RegisterUser } from "../../apicalls/users";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setLoading } from "../../redux/loadersSlice";
 
 const rules = [
   {
@@ -15,21 +13,15 @@ const rules = [
 ]
 function Register() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
   const onFinish = async(values) => {
     try {
-      dispatch(setLoading(true));
       const response = await RegisterUser(values);
-      dispatch(setLoading(false));
       if(response.success) {
-        navigate('/login');
         message.success(response.message);
       } else {
         throw new Error(response.message);
       }
     } catch (error) {
-      dispatch(setLoading(false));
       message.error(error.message);
     }
   };
@@ -44,7 +36,7 @@ function Register() {
     <div className="h-screen bg-primary flex justify-center items-center">
       <div className="bg-white p-5 rounded w-[450px]">
         <h1 className="text-primary text-2xl">
-          SMP - <span className="text-gray-400 text-2xl">REGISTER</span>
+          SMP - <span className="text-gray-400">REGISTER</span>
         </h1>
         <Divider />
         <Form layout="vertical" onFinish={onFinish}>
