@@ -1,41 +1,34 @@
-import React, { useEffect } from 'react';
-import { message } from 'antd';
-import { GetCurrentUser } from '../apicalls/users';
-import { useNavigate } from 'react-router';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
-import Checkbox from '@mui/material/Checkbox';
+import React, { useEffect, useState } from "react";
+import { Avatar, Badge, message } from "antd";
+import { GetCurrentUser } from "../apicalls/users";
+import { useNavigate } from "react-router";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
+import { styled } from "@mui/material/styles";
+import Checkbox from "@mui/material/Checkbox";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "../redux/loadersSlice";
+import { SetUser } from "../redux/usersSlice";
+import Notifications from "./Notifications";
+import {
+  GetAllNotifications,
+  ReadAllNotifications,
+} from "../apicalls/notifications";
 
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-
-const DemoPaper = styled(Paper)(({ theme }) => ({
-    width: 120,
-    height: 120,
-    padding: theme.spacing(2),
-    ...theme.typography.body2,
-    textAlign: 'center',
-  }));
-
-  
 function ProtectedPage({ children }) {
-    const [user, setUser] = React.useState(null);
-    const navigate = useNavigate();
+  const [notifications = [], setNotifications] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
+  // const [user, setUser] = React.useState(null);
+  const { user } = useSelector((state) => state.users);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    const validateToken = async () => {
-        try {
-            const response = await GetCurrentUser();
+  const validateToken = async () => {
+    try {
+      dispatch(setLoading(true));
+      const response = await GetCurrentUser();
+      dispatch(setLoading(false));
 
-            if(response.success)
-            {
-                setUser(response.data);
-            } else {
-                navigate('/login');
-                message.error(response.error);
-            }
-        } catch (error) {
-            navigate('/login');
-            message.error(error.message);
       if (response.success) {
         // setUser(response.data);
         dispatch(SetUser(response.data));
@@ -43,6 +36,10 @@ function ProtectedPage({ children }) {
         navigate("/login");
         message.error(response.error);
       }
+    } catch (error) {
+      dispatch(setLoading(false));
+      navigate("/login");
+      message.error(error.message);
     }
   };
 
@@ -147,39 +144,9 @@ function ProtectedPage({ children }) {
             reloadNotifications={getNotifications}
           />
         }
-      </div> )
-  )
-
-    useEffect(() => {
-        if(localStorage.getItem('token'))
-        {
-            validateToken();
-        } else {
-            message.error('Please login to continue');
-            navigate('/login');
-        }
-    }, []);
-  return (
-    <div>
-      {
-        user && (
-            <div className='p-5'>
-                {user.name}
-                {children}
-                <Stack direction="row" spacing={2}>
-      <DemoPaper square={false}>rounded corners</DemoPaper>
-      <DemoPaper square>square corners</DemoPaper>
-    </Stack>
-                <Checkbox {...label} defaultChecked />
-      <Checkbox {...label} />
-      <Checkbox {...label} disabled />
-      
-      <Checkbox {...label} disabled checked />
-            </div>
-        )
-      }
-    </div>
-  )
+      </div>
+    )
+  );
 }
 
-export default ProtectedPage
+export default ProtectedPage;
