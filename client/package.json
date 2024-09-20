@@ -10,10 +10,7 @@
     "@types/react-router-dom": "^5.3.3",
     "antd": "^5.16.2",
     "axios": "^1.6.8",
-<<<<<<< HEAD
-=======
     "moment": "^2.30.1",
->>>>>>> parent of 04d8e48 (fix mongodb connection/feat cypress)
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.22.3",

@@ -28,8 +28,6 @@ export const GetCurrentUser = async () => {
     } catch (error) {
         return error.message;
     }
-<<<<<<< HEAD
-=======
 }
 
 // get all users
@@ -53,5 +51,4 @@ export const UpdateUserstatus = async(id, status) => {
     } catch (error) {
         return error.message;
     }
->>>>>>> parent of 04d8e48 (fix mongodb connection/feat cypress)
 }
